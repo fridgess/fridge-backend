@@ -1,0 +1,92 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.5'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'jacoco'
+}
+
+test {
+    useJUnitPlatform()
+    if (System.getProperty("excludeTags")) {
+        useJUnitPlatform {
+            excludeTags System.getProperty("excludeTags")
+        }
+    }
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+    // Q클래스 등 자동 생성 코드 제외
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, exclude: [
+                            '**/Q*.class',                        // QueryDSL Q클래스
+                            '**/generated/**',                   // generated 경로
+                    ])
+                })
+        )
+    }
+}
+
+// 환경변수에서 버전 불러오기
+def envVersion = System.getenv("PROJECT_VERSION") ?: "0.0.1-SNAPSHOT"
+
+group = 'com.fridge'
+version = envVersion
+description = 'fridge-backend'
+
+bootJar {
+    archiveFileName = "${project.name}-${project.version}.jar"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    // jpa
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // spring web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // swagger (api docs)
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
+
+    // spring validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

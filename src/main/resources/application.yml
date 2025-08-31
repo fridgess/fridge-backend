@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: ${PROJECT_NAME:fridge-backend}
+
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
