@@ -13,12 +13,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
   private final MDCInterceptor mdcInterceptor;
 
+  private static final String[] EXCLUDE_PATTERNS = {
+      "/actuator/**", "/favicon.ico", "/error", "/css/**", "/js/**", "/images/**", "/webjars/**"
+  };
+
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(mdcInterceptor)
         .order(Ordered.HIGHEST_PRECEDENCE)
         .addPathPatterns("/**")
-        .excludePathPatterns("/actuator/**", "/health", "/favicon.ico", "/error", "/css/**",
-            "/js/**", "/images/**");
+        .excludePathPatterns(EXCLUDE_PATTERNS);
   }
 }
