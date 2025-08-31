@@ -15,13 +15,13 @@ spring:
       ddl-auto: validate
     database: postgresql
     show-sql: false
+    open-in-view: false
     properties:
       hibernate:
         format_sql: true
         use_sql_comments: true
         highlight_sql: true
         generate_statistics: false
-        open-in-view: false
         cache:
           use_second_level_cache: false
 
