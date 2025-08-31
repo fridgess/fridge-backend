@@ -1,21 +1,25 @@
-package com.fridge.fridgebackend.global.exception;
+package com.fridge.fridgebackend.global.response;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 /**
- * Custom Error 지정 필요성이 있다면 에러 코드를 작성하여 진행.
+ * 결과 코드 작성
  * <p>
- * 일반적인 상황의 에러만 적혀있지만, 특정 도메인에서 발생할 수 있는 에러 등 정의
- * <p>
- * CustomException(ErrorCode.INTERNAL_SERVER_ERROR) 처럼 사용.
+ * 성공 코드 및 특정 도메인에서 발생할 수 있는 에러 등 응답 시 전달해야 하는 결과 코드 정의
  */
 
 @Getter
 @RequiredArgsConstructor
-public enum ErrorCode {
+public enum ResultCode {
 
+  // SUCCESS
+  SUCCESS(HttpStatus.OK, "SUC20000", "OK"),
+  CREATED(HttpStatus.CREATED, "SUC20101", "CREATED"),
+  DELETE_SUCCESS(HttpStatus.NO_CONTENT, "SUC20401", "DELETE SUCCESS"),
+
+  // ERROR -------------------
   // COMMON
   INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMM50000", "서버 에러입니다. 관리자에게 연락해주세요."),
   SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "COMM50301", "일시적으로 사용할 수 없습니다."),
