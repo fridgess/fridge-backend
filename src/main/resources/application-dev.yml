@@ -3,6 +3,12 @@ spring:
   config:
     import: optional:file:.env.dev[.properties]
 
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
   # jpa
   jpa:
     hibernate:
