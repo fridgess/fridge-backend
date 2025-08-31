@@ -83,8 +83,14 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // test
+    // About Test
+    // spring test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // h2 DB
+    runtimeOnly 'com.h2database:h2'
+
+    // junit
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
