@@ -19,7 +19,7 @@ public class CustomException extends RuntimeException {
   public CustomException(ResultCode resultCode, Map<String, Object> details) {
     super(resultCode.getMessage());
     this.resultCode = resultCode;
-    this.details = details;
+    this.details = details == null ? Map.of() : details;
   }
 
 }

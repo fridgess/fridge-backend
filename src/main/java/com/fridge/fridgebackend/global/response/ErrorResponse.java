@@ -31,7 +31,7 @@ public class ErrorResponse extends CustomResponse {
   }
 
   public static ErrorResponse of(ResultCode errorCode, Map<String, Object> details) {
-    return new ErrorResponse(errorCode, details);
+    return new ErrorResponse(errorCode, details == null ? Map.of() : details);
   }
 
   public static ErrorResponse of(ResultCode errorCode, Exception e) {
