@@ -31,12 +31,12 @@ class ErrorCodeTest {
   @Test
   @DisplayName("에러 코드의 코드 숫자 부분 앞 3자리가 HTTP 상태 코드와 일치한다")
   void httpStatusShouldMatchCodePrefix() {
-    for (ErrorCode errorCode: ErrorCode.values()) {
+    for (ErrorCode errorCode : ErrorCode.values()) {
       String code = errorCode.getCode();
-      int httpStatusValue = errorCode.getStatus().value();
+      int httpStatus = errorCode.getStatus().value();
 
-      String expected = String.valueOf(httpStatusValue);
-      assertThat(code.contains(expected.substring(0, 3))).isTrue();
+      assertThat(code).as("code=%s, status=%d", code, httpStatus)
+          .matches("^[A-Z]{3,4}" + httpStatus + "\\d{2}$");
     }
   }
 
