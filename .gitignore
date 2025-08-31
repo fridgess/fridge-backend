@@ -195,5 +195,9 @@ gradle-app.setting
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,java,intellij,gradle
 
+
+.idea/
+*.iml
+
 ### 환경 변수
 *.env*
