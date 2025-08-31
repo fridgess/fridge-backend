@@ -1,0 +1,78 @@
+spring:
+  # env
+  config:
+    import: optional:file:.env.dev[.properties]
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+  # jpa
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database: postgresql
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        highlight_sql: true
+        generate_statistics: false
+        cache:
+          use_second_level_cache: false
+
+  transaction:
+    default-timeout: 30
+
+# logging
+logging:
+  level:
+    root: info
+    com.fridge.fridgebackend: debug
+    org:
+      hibernate:
+        sql: debug
+
+# port
+server:
+  port: ${SERVER_PORT:8080}
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+
+# swagger
+springdoc:
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  swagger-ui:
+    operations-sorter: alpha
+    tags-sorter: alpha
+    path: /swagger-ui
+    display-request-duration: true
+    doc-expansion: none
+    filter: true
+    show-extensions: true
+
+
+# actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+      cache:
+        time-to-live: 10s  # health 엔드포인트 캐싱
+    metrics:
+      cache:
+        time-to-live: 30s  # 메트릭 캐싱으로 성능 최적화
