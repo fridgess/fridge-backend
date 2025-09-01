@@ -1,24 +1,25 @@
 package com.fridge.fridgebackend.global.exception;
 
+import com.fridge.fridgebackend.global.response.ResultCode;
 import java.util.Map;
 import lombok.Getter;
 
 @Getter
 public class CustomException extends RuntimeException {
 
-  private final ErrorCode errorCode;
+  private final ResultCode resultCode;
   private final Map<String, Object> details;
 
-  public CustomException(ErrorCode errorCode) {
-    super(errorCode.getMessage());
-    this.errorCode = errorCode;
+  public CustomException(ResultCode resultCode) {
+    super(resultCode.getMessage());
+    this.resultCode = resultCode;
     this.details = Map.of();
   }
 
-  public CustomException(ErrorCode errorCode, Map<String, Object> details) {
-    super(errorCode.getMessage());
-    this.errorCode = errorCode;
-    this.details = details;
+  public CustomException(ResultCode resultCode, Map<String, Object> details) {
+    super(resultCode.getMessage());
+    this.resultCode = resultCode;
+    this.details = details == null ? Map.of() : details;
   }
 
 }

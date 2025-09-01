@@ -2,7 +2,7 @@ name: Auto Create Branch with ISSUE
 
 on:
   issues:
-    types: [opened]
+    types: [ opened ]
 
 permissions:
   contents: write

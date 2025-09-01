@@ -1,6 +1,7 @@
 package com.fridge.fridgebackend.global.exception;
 
 import com.fridge.fridgebackend.global.response.ErrorResponse;
+import com.fridge.fridgebackend.global.response.ResultCode;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -34,9 +35,9 @@ public class GlobalExceptionHandler {
         errors);
 
     return ResponseEntity
-        .status(ErrorCode.INVALID_INPUT_VALUE.getStatus())
+        .status(ResultCode.INVALID_INPUT_VALUE.getStatus())
         .body(
-            ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, e, Map.of("validationError", errors)));
+            ErrorResponse.of(ResultCode.INVALID_INPUT_VALUE, Map.of("validationError", errors)));
   }
 
   /**
@@ -49,9 +50,9 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
     log.error("handleCustomException() in GlobalExceptionHandler throw CustomException", e);
 
-    ErrorResponse errorResponse = ErrorResponse.of(e.getErrorCode(), e, e.getDetails());
+    ErrorResponse errorResponse = ErrorResponse.of(e.getResultCode(), e.getDetails());
     return ResponseEntity
-        .status(e.getErrorCode().getStatus())
+        .status(e.getResultCode().getStatus())
         .body(errorResponse);
   }
 
@@ -66,9 +67,8 @@ public class GlobalExceptionHandler {
     log.error("handleCustomException() in GlobalExceptionHandler throw Exception", e);
 
     return ResponseEntity
-        .status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus())
-        .body(ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR, e,
-            Map.of("reason", "Unexpected error")));
+        .status(ResultCode.INTERNAL_SERVER_ERROR.getStatus())
+        .body(ErrorResponse.unexpected(e));
   }
 
 }

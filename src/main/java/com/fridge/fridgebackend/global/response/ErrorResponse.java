@@ -1,31 +1,46 @@
 package com.fridge.fridgebackend.global.response;
 
-import com.fridge.fridgebackend.global.exception.ErrorCode;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fridge.fridgebackend.global.exception.CustomException;
 import java.util.Map;
-import lombok.Builder;
+import lombok.Getter;
 
 /**
- * 에러 응답 시 사용하는 응답 record.
+ * 에러 응답 클래스
  *
- * @param exceptionName
- * @param message       메시지 (어떤 에러가 발생했는지)
- * @param code          에러 코드
- * @param details       해당 에러에 대한 세부 사항
+ * @param <T>
  */
-@Builder
-public record ErrorResponse(
-    String exceptionName,
-    String message,
-    String code,
-    Map<String, Object> details
-) {
+@Getter
+@JsonInclude(Include.NON_EMPTY)
+public class ErrorResponse extends CustomResponse {
 
-  public static ErrorResponse of(ErrorCode errorCode, Exception e, Map<String, Object> details) {
-    return ErrorResponse.builder()
-        .exceptionName(e.getClass().getSimpleName())
-        .code(errorCode.getCode())
-        .message(errorCode.getMessage())
-        .details(details)
-        .build();
+  private final Map<String, Object> details;
+
+  private ErrorResponse(ResultCode errorCode, Map<String, Object> details) {
+    super(errorCode, false);
+    this.details = details.isEmpty() ? Map.of() : Map.copyOf(details);
   }
+
+  public static ErrorResponse of(ResultCode errorCode) {
+    return new ErrorResponse(errorCode, Map.of());
+  }
+
+  public static ErrorResponse of(CustomException e) {
+    return new ErrorResponse(e.getResultCode(), e.getDetails());
+  }
+
+  public static ErrorResponse of(ResultCode errorCode, Map<String, Object> details) {
+    return new ErrorResponse(errorCode, details == null ? Map.of() : details);
+  }
+
+  public static ErrorResponse of(ResultCode errorCode, Exception e) {
+    return new ErrorResponse(errorCode, Map.of("exceptionType", e.getClass().getSimpleName()));
+  }
+
+  // 혹시 모를 500용
+  public static ErrorResponse unexpected(Exception e) {
+    return of(ResultCode.INTERNAL_SERVER_ERROR, e);
+  }
+
 }
